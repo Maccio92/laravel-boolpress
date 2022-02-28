@@ -14,7 +14,7 @@
                     <h3 class="m-0 text-capitalize">{{$post -> title}}</h3>
                 </div>
                 <div class="d-flex gap-5">
-                    <button class="btn btn-primary"><a class="text-light" href="{{ route('admin.posts.show', $post) }}">Vai</a></button>
+                    <button class="btn btn-primary"><a class="text-light" href="{{ route('admin.posts.show', $post->slug) }}">Vai</a></button>
                 </div>
             </div>
         @endforeach

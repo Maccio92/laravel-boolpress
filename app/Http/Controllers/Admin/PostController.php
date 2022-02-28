@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\Post;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -12,7 +13,6 @@ class PostController extends Controller
         'title' => 'required|max:80',
         'author' => 'required|max:80',
         'content' => 'required',
-        'slug' => 'required',
     ];
     /**
      * Display a listing of the resource.
@@ -45,11 +45,24 @@ class PostController extends Controller
     {
         $validateData = $request->validate($this->validator);
         $data = $request->all();
+
+        $slug = Str::slug($data['title'], '-');
+        $postPresente = Post::where('slug', $slug)->first();
+
+
+        $counter = 0;
+        while ($postPresente) {
+            $slug = $slug . '-' . $counter;
+            $postPresente = Post::where('slug', $slug)->first();
+            $counter++;
+        }
+
         $post = new Post();
         $post->fill($data);
+        $post->slug = $slug;
         $post->save();
     
-        return redirect()->route('admin.posts.index', $post->id);
+        return redirect()->route('admin.posts.index', ['post' => $post]);
     }
 
     /**
@@ -60,7 +73,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return view('admin.posts.show', compact('post'));
+        return redirect()->route('admin.posts.show', $post->slug);
     }
 
     /**
