@@ -4,9 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Model\Post;
 
 class PostController extends Controller
 {
+    protected $validator =  [
+        'title' => 'required|max:80',
+        'author' => 'required|max:80',
+        'content' => 'required',
+        'slug' => 'required',
+    ];
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +21,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $posts = Post::paginate(5);
+        return view('admin.posts.index', compact('posts'));
     }
 
     /**
@@ -24,7 +32,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.posts.create', ['title' => 'Create Post']);
     }
 
     /**
@@ -35,7 +43,13 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validateData = $request->validate($this->validator);
+        $data = $request->all();
+        $post = new Post();
+        $post->fill($data);
+        $post->save();
+    
+        return redirect()->route('admin.posts.index', $post->id);
     }
 
     /**
