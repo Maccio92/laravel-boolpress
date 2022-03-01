@@ -22,7 +22,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::paginate(5);
-        return view('admin.posts.index', compact('posts'));
+        return view('admin.posts.index', ['posts' => $posts]);
     }
 
     /**
@@ -46,23 +46,23 @@ class PostController extends Controller
         $validateData = $request->validate($this->validator);
         $data = $request->all();
 
-        $slug = Str::slug($data['title'], '-');
-        $postPresente = Post::where('slug', $slug)->first();
+        // $slug = Str::slug($data['title'], '-');
+        // $postPresente = Post::where('slug', $slug)->first();
 
 
-        $counter = 0;
-        while ($postPresente) {
-            $slug = $slug . '-' . $counter;
-            $postPresente = Post::where('slug', $slug)->first();
-            $counter++;
-        }
+        // $counter = 0;
+        // while ($postPresente) {
+        //     $slug = $slug . '-' . $counter;
+        //     $postPresente = Post::where('slug', $slug)->first();
+        //     $counter++;
+        // }
 
         $post = new Post();
         $post->fill($data);
-        $post->slug = $slug;
+        // $post->slug = $slug;
         $post->save();
     
-        return redirect()->route('admin.posts.index', ['post' => $post]);
+        return redirect()->route('admin.posts.index', $post->id);
     }
 
     /**
@@ -73,7 +73,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return redirect()->route('admin.posts.show', $post->slug);
+        return redirect()->route('admin.posts.show', $post->id);
     }
 
     /**
@@ -105,8 +105,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+
+        return redirect()->route('admin.posts.index')->with('status', "Post id $post->id deleted");
     }
 }
