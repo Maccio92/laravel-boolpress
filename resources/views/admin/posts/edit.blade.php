@@ -3,9 +3,9 @@
 @section('content')
 <div class="container">
         <div class="row">
-            <form action="{{ route('admin.posts.store') }}" method="post">
+            <form action="{{ route('admin.posts.update', $post) }}" method="post">
                 @csrf
-                @method('POST')
+                @method('PATCH')
                 <div class="mb-3">
                     <label for="title" class="form-label">Titolo</label>
                     <input type="text" class="form-control" id="title" name="title" value="{{ $post->title }}">

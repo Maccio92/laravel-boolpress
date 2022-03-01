@@ -48,20 +48,20 @@ class PostController extends Controller
         $data = $request->all();
         $data['user_id'] = Auth::user()->id;
 
-        // $slug = Str::slug($data['title'], '-');
-        // $postPresente = Post::where('slug', $slug)->first();
+        $slug = Str::slug($data['title'], '-');
+        $postPresente = Post::where('slug', $slug)->first();
 
 
-        // $counter = 0;
-        // while ($postPresente) {
-        //     $slug = $slug . '-' . $counter;
-        //     $postPresente = Post::where('slug', $slug)->first();
-        //     $counter++;
-        // }
+        $counter = 0;
+        while ($postPresente) {
+            $slug = $slug . '-' . $counter;
+            $postPresente = Post::where('slug', $slug)->first();
+            $counter++;
+        }
 
         $post = new Post();
         $post->fill($data);
-        // $post->slug = $slug;
+        $post->slug = $slug;
         $post->save();
     
         return redirect()->route('admin.posts.index', $post->id);
