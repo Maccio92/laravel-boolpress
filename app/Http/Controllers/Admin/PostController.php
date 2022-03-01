@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\Post;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -45,6 +46,7 @@ class PostController extends Controller
     {
         $validateData = $request->validate($this->validator);
         $data = $request->all();
+        $data['user_id'] = Auth::user()->id;
 
         // $slug = Str::slug($data['title'], '-');
         // $postPresente = Post::where('slug', $slug)->first();
@@ -73,7 +75,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return redirect()->route('admin.posts.show', $post->id);
+        return view('admin.posts.show', ['post' => $post]);
     }
 
     /**
@@ -82,9 +84,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return view('admin.posts.edit', ['post' => $post]);
     }
 
     /**
@@ -94,9 +96,16 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        $validateData = $request->validate($this->validator);
+        $data = $request->all();
+        $updated = $post->update($data);
+        if (!$updated) {
+            dd('update non riuscito');
+        }
+
+        return redirect()->route('admin.posts.show', $post->id);
     }
 
     /**

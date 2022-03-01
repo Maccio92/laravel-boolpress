@@ -8,21 +8,21 @@
                 @method('POST')
                 <div class="mb-3">
                     <label for="title" class="form-label">Titolo</label>
-                    <input type="text" class="form-control" id="title" name="title">
+                    <input type="text" class="form-control" id="title" name="title" value="{{ $post->title }}">
                     @error('title')
                             <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="mb-3">
                     <label for="author" class="form-label">Autore</label>
-                    <input type="text" class="form-control" id="author" name="author">
+                    <input type="text" class="form-control" id="author" name="author" value="{{ $post->author }}">
                     @error('author')
                             <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="mb-3">
                     <label for="content" class="form-label">Descrizione</label>
-                    <textarea class="form-control" id="content" name="content" rows="3"></textarea>
+                    <textarea class="form-control" id="content" name="content" rows="3">{{ $post->content }}</textarea>
                     @error('content')
                             <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
