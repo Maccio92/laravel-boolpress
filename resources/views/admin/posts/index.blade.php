@@ -14,13 +14,18 @@
                     <h3 class="m-0 text-capitalize">{{$post -> title}}</h3>
                 </div>
                 <div class="d-flex">
-                    <button class="btn btn-primary mx-2"><a class="text-light" href="{{ route('admin.posts.show', $post->id) }}">Vai</a></button>
-                    <button class="btn btn-primary mx-2"><a class="text-light" href="{{ route('admin.posts.edit', $post) }}">Modifica</a></button>
-                    <form action="{{ route('admin.posts.destroy', $post) }}" method="post">
-                                    @csrf
-                                    @method('DELETE')
-                                    <input class="btn btn-danger mx-2" type="submit" value="Delete">
-                                </form>
+                    <button class="btn btn-primary mx-2"><a class="text-light" href="{{ route('admin.posts.show', $post->slug) }}">Vai</a></button>
+                    @if (Auth::user()->id === $post->user_id)
+                    <button class="btn btn-primary mx-2">
+                        <a class="text-light" href="{{ route('admin.posts.edit', $post->slug) }}">Modifica</a>
+                    @endif</button>
+                    @if (Auth::user()->id === $post->user_id)
+                        <form action="{{ route('admin.posts.destroy', $post) }}" method="post">
+                            @csrf
+                            @method('DELETE')
+                            <input class="btn btn-danger mx-2" type="submit" value="Delete">
+                        </form>
+                    @endif
                 </div>
             </div>
         @endforeach

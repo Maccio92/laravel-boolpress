@@ -20,7 +20,8 @@ class PostSeeder extends Seeder
         $post->title = $faker->sentence(3, true);
         $post->author = $faker->words(2, true);
         $post->content = $faker->text();
-        $post->slug = Str::slug($post->title, '-');
+        $title = "$post->title-$i";
+        $post->slug = Str::slug($title, '-');
         $post->user_id = User::inRandomOrder()->first()->id;
         $post->save();
         }

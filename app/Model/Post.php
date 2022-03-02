@@ -19,19 +19,28 @@ class Post extends Model
     {
         return $this->belongsTo('App\User');
     }
-    // public function createSlug($title)
-    // {
-    //     $slug = Str::slug($title, '-');
+    public function category()
+    {
+        return $this->belongsTo('App\Model\Category');
+    }
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
-    //     $oldPost = Post::where('slug', $slug)->first();
+    public function createSlug($title)
+    {
+        $slug = Str::slug($title, '-');
 
-    //     $counter = 0;
-    //     while ($oldPost) {
-    //         $newSlug = $slug . '-' . $counter;
-    //         $oldPost = Post::where('slug', $newSlug)->first();
-    //         $counter++;
-    //     }
+        $oldPost = Post::where('slug', $slug)->first();
 
-    //     return (empty($newSlug)) ? $slug : $newSlug;
-    // }
+        $counter = 0;
+        while ($oldPost) {
+            $newSlug = $slug . '-' . $counter;
+            $oldPost = Post::where('slug', $newSlug)->first();
+            $counter++;
+        }
+
+        return (empty($newSlug)) ? $slug : $newSlug;
+    }
 }

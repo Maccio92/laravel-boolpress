@@ -86,6 +86,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        if (Auth::user()->id != $post->user_id) {
+            abort('403');
+        }
         return view('admin.posts.edit', ['post' => $post]);
     }
 
@@ -100,12 +103,18 @@ class PostController extends Controller
     {
         $validateData = $request->validate($this->validator);
         $data = $request->all();
-        $updated = $post->update($data);
-        if (!$updated) {
-            dd('update non riuscito');
+        if (Auth::user()->id != $post->user_id) {
+            abort('403');
         }
-
-        return redirect()->route('admin.posts.show', $post->id);
+        if ($data['title'] != $post->title) {
+            $post->title = $data['title'];
+            $post->slug = $post->createSlug($data['title']);
+        }
+        if ($data['content'] != $post->content) {
+            $post->content = $data['content'];
+        }
+        $post->update();
+        return redirect()->route('admin.posts.show', $post->slug);
     }
 
     /**
@@ -116,6 +125,9 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        if (Auth::user()->id != $post->user_id) {
+            abort('403');
+        }
         $post->delete();
 
         return redirect()->route('admin.posts.index')->with('status', "Post id $post->id deleted");

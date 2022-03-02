@@ -10,7 +10,7 @@
         </div>
         <div class="row border-bottom border-2 p-3">
             <div class="col-12">
-                <h2 class="text-dark text-capitalize">autore: {{ $post->author }}</h2>
+                <h2 class="text-dark text-capitalize">autore: {{ $post->user()->first()->name }}</h2>
             </div>
         </div>
         <div class="row border-bottom border-2 p-3 bg-info">
