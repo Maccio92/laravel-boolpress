@@ -7,6 +7,13 @@
                 @csrf
                 @method('PATCH')
                 <div class="mb-3">
+                <select class="form-select" name="category_id">
+                        <option value="">Select a category</option>
+                        @foreach ($categories as $category)
+                            <option @if (old('category_id', $post->category_id) == $category->id) selected @endif value="{{ $category->id }}">
+                                {{ $category->name }} - {{ $category->id }}</option>
+                        @endforeach
+                    </select>
                     <label for="title" class="form-label">Titolo</label>
                     <input type="text" class="form-control" id="title" name="title" value="{{ $post->title }}">
                     @error('title')

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\Post;
+use App\Model\Category;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,6 +15,7 @@ class PostController extends Controller
         'title' => 'required|max:80',
         'author' => 'required|max:80',
         'content' => 'required',
+        'category_id' => 'exists:App\Model\Category,id',
     ];
     /**
      * Display a listing of the resource.
@@ -33,7 +35,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create', ['title' => 'Create Post']);
+        $categories = Category::all();
+
+        return view('admin.posts.create', ['categories' => $categories]);
     }
 
     /**
@@ -64,7 +68,7 @@ class PostController extends Controller
         $post->slug = $slug;
         $post->save();
     
-        return redirect()->route('admin.posts.index', $post->id);
+        return redirect()->route('admin.posts.index', $post->slug);
     }
 
     /**
@@ -89,7 +93,8 @@ class PostController extends Controller
         if (Auth::user()->id != $post->user_id) {
             abort('403');
         }
-        return view('admin.posts.edit', ['post' => $post]);
+        $categories = Category::all();
+        return view('admin.posts.edit', ['post' => $post], ['categories' => $categories]);
     }
 
     /**
@@ -113,6 +118,10 @@ class PostController extends Controller
         if ($data['content'] != $post->content) {
             $post->content = $data['content'];
         }
+        if ($data['category_id'] != $post->category_id) {
+            $post->category_id = $data['category_id'];
+        }
+
         $post->update();
         return redirect()->route('admin.posts.show', $post->slug);
     }
