@@ -25,13 +25,13 @@
                             <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
-                <div class="mb-3">
+                <!-- <div class="mb-3">
                     <label for="author" class="form-label">Autore</label>
-                    <input type="text" class="form-control" id="author" name="author">
+                    <input type="hidden" class="form-control" id="author" name="{{Auth::user()->name}}">
                     @error('author')
                             <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
-                </div>
+                </div> -->
                 <div class="mb-3">
                     <label for="content" class="form-label">Descrizione</label>
                     <textarea class="form-control" id="content" name="content" rows="3"></textarea>

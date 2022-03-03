@@ -13,7 +13,7 @@ class PostController extends Controller
 {
     protected $validator =  [
         'title' => 'required|max:80',
-        'author' => 'required|max:80',
+        // 'author' => 'required|max:80',
         'content' => 'required',
         'category_id' => 'exists:App\Model\Category,id',
     ];
@@ -48,9 +48,13 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $validateData = $request->validate($this->validator);
+        
         $data = $request->all();
         $data['user_id'] = Auth::user()->id;
+        $data['author'] = Auth::user()->name;
+        $validateData = $request->validate($this->validator);
+        
+        
 
         $slug = Str::slug($data['title'], '-');
         $postPresente = Post::where('slug', $slug)->first();
