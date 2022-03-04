@@ -3,23 +3,28 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="row bg-dark p-3">
-            <div class="col">
-                <h1 class="text-light text-capitalize">{{ $post->title }}</h1>
+        <div class="row p-3">
+            <ul class="list-unstyled col">
+                <li class="bg-dark p-2">
+                    <h1 class="text-light text-capitalize m-0">{{ $post->title }}</h1>
+                </li>
+                <li class="bg-light">
+                    <h2 class="bg-primary text-light p-2 text-capitalize">autore: </h2>
+                    <h4 class="text-dark">{{ $post->user()->first()->name }}</h4>
+                </li>
+                <li class=" ">  
+                    <h4 class="bg-primary text-light p-2">Descrizione</h4>
+                    <p class="text-dark">{{ $post->content }}</p>
+                </li>
+                <li class="">
+                <h4 class="bg-primary text-light p-2">Tags:</h4>
+                @foreach ($post->tags()->get() as $tag)
+                    <a href="#" class="text-dark text-capitalize">{{ $tag->name }}</a>
+                @endforeach
+                </li>
+            </ul>
+        <div class="py-3">
             </div>
         </div>
-        <div class="row border-bottom border-2 p-3">
-            <div class="col-12">
-                <h2 class="text-dark text-capitalize">autore: {{ $post->user()->first()->name }}</h2>
-            </div>
-        </div>
-        <div class="row border-bottom border-2 p-3 bg-info">
-            <div class="col">
-                <p class="text-dark">Descrizione:<br>{{ $post->content }}</p>
-            </div>
-        </div>
-        <div class="p-3">
-            <button class="btn btn-primary"><a class="text-light text-capitalize p-2" href="{{ route('admin.posts.index') }}">Back</a></button>
-        </div>
-    </div>
+        <button class="btn btn-primary"><a class="text-light text-capitalize p-2" href="{{ route('admin.posts.index') }}">Back</a></button>
 @endsection

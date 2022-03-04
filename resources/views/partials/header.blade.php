@@ -1,11 +1,11 @@
 <nav class="navbar navbar-expand-lg @guest navbar-light light-dark @endguest @auth navbar-dark bg-dark @endauth">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{{ route('guest.index') }}">{{ config('app.name', 'Laravel') }}</a>
+        <a class="navbar-brand" href="{{ route('guest.index') }}">{{ config('app.name', 'BoolPress') }}</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 @guest
                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
