@@ -20,6 +20,10 @@ class Post extends Model
     {
         return $this->belongsTo('App\User');
     }
+    public function tags() 
+    {
+        return $this->belongsToMany('App\Model\Tag')->withTimestamps();
+    }
     public function category()
     {
         return $this->belongsTo('App\Model\Category');

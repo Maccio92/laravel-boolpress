@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\Post;
 use App\Model\Category;
+use App\Model\Tag;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,6 +17,7 @@ class PostController extends Controller
         // 'author' => 'required|max:80',
         'content' => 'required',
         'category_id' => 'exists:App\Model\Category,id',
+        'tags.*' => 'nullable|exists:App\Model\Tag,id'
     ];
     /**
      * Display a listing of the resource.
@@ -36,8 +38,9 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
+        $tags = Tag::all();
 
-        return view('admin.posts.create', ['categories' => $categories]);
+        return view('admin.posts.create', ['categories' => $categories, 'tags'=>$tags]);
     }
 
     /**
@@ -52,13 +55,10 @@ class PostController extends Controller
         $data = $request->all();
         $data['user_id'] = Auth::user()->id;
         $data['author'] = Auth::user()->name;
-        $validateData = $request->validate($this->validator);
-        
-        
+        $validateData = $request->validate($this->validator);       
 
         $slug = Str::slug($data['title'], '-');
         $postPresente = Post::where('slug', $slug)->first();
-
 
         $counter = 0;
         while ($postPresente) {
@@ -71,6 +71,10 @@ class PostController extends Controller
         $post->fill($data);
         $post->slug = $slug;
         $post->save();
+
+        if (!empty($data['tags'])) {
+            $post->tags()->attach($data['tags']);
+        }
     
         return redirect()->route('admin.posts.index', $post->slug);
     }
@@ -98,7 +102,8 @@ class PostController extends Controller
             abort('403');
         }
         $categories = Category::all();
-        return view('admin.posts.edit', ['post' => $post], ['categories' => $categories]);
+        $tags = Tag::all();
+        return view('admin.posts.edit', ['post' => $post, 'categories' => $categories, 'tags'=> $tags]);
     }
 
     /**
@@ -127,6 +132,13 @@ class PostController extends Controller
         }
 
         $post->update();
+
+        if (!empty($data['tags'])) {
+            $post->tags()->sync($data['tags']);
+        } else {
+            $post->tags()->detach();
+        }
+
         return redirect()->route('admin.posts.show', $post->slug);
     }
 
@@ -141,6 +153,7 @@ class PostController extends Controller
         if (Auth::user()->id != $post->user_id) {
             abort('403');
         }
+        $post->tags()->detach();
         $post->delete();
 
         return redirect()->route('admin.posts.index')->with('status', "Post id $post->id deleted");
