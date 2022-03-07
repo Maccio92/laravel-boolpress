@@ -54,12 +54,17 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        
+        // dd($request);
         $data = $request->all();
         $data['user_id'] = Auth::user()->id;
         $data['author'] = Auth::user()->name;
         $validateData = $request->validate($this->validator);       
 
+        if (!empty($data['image'])) {
+            $img_path = Storage::put('uploads', $data['image']);
+            $data['image'] = $img_path;
+        }
+        
         $slug = Str::slug($data['title'], '-');
         $postPresente = Post::where('slug', $slug)->first();
 
@@ -70,6 +75,7 @@ class PostController extends Controller
             $counter++;
         }
 
+        
         $post = new Post();
         $post->fill($data);
         $post->slug = $slug;
@@ -78,10 +84,7 @@ class PostController extends Controller
         if (!empty($data['tags'])) {
             $post->tags()->attach($data['tags']);
         }
-        if (!empty($data['img_path'])) {
-            $img_path = Storage::put('uploads', $data['image']);
-            $data['image'] = $img_path;
-        }
+        
     
     
         return redirect()->route('admin.posts.index', $post->slug);
@@ -137,6 +140,11 @@ class PostController extends Controller
         }
         if ($data['category_id'] != $post->category_id) {
             $post->category_id = $data['category_id'];
+        }
+        if(!empty($data['image'])){
+            Storage::delete($post->image);
+            $img_path = Storage::put('uploads', $data['image']);
+            $post->image = $img_path;
         }
 
         $post->update();

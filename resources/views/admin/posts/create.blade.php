@@ -50,6 +50,11 @@
                     <label class="form-label" for="image"></label>
                     <input type="file" class="form-control" id="image" name="image">
                 </div>
+                @error('image')
+                        <div class="alert alert-danger mt-3">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>
         </div>
