@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
         <div class="row">
-            <form action="{{ route('admin.posts.store') }}" method="post" class="col">
+            <form action="{{ route('admin.posts.store') }}" method="post" enctype="multipart/form-data" class="col">
                 @csrf
                 @method('POST')
                 <div>
@@ -44,7 +44,12 @@
                             </label>
                         </div>
                     @endforeach
-</div>
+                </div>
+                <div class="mb-3 py-3">
+                    <legend class="bg-primary text-light p-2">Aggiungi un'immagine</legend>
+                    <label class="form-label" for="image"></label>
+                    <input type="file" class="form-control" id="image" name="image">
+                </div>
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>
         </div>

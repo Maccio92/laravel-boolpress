@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\Post;
@@ -10,6 +11,7 @@ use App\Model\Tag;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
+
 class PostController extends Controller
 {
     protected $validator =  [
@@ -17,7 +19,8 @@ class PostController extends Controller
         // 'author' => 'required|max:80',
         'content' => 'required',
         'category_id' => 'exists:App\Model\Category,id',
-        'tags.*' => 'nullable|exists:App\Model\Tag,id'
+        'tags.*' => 'nullable|exists:App\Model\Tag,id',
+        'image' => 'nullable|image'
     ];
     /**
      * Display a listing of the resource.
@@ -75,6 +78,11 @@ class PostController extends Controller
         if (!empty($data['tags'])) {
             $post->tags()->attach($data['tags']);
         }
+        if (!empty($data['img_path'])) {
+            $img_path = Storage::put('uploads', $data['image']);
+            $data['image'] = $img_path;
+        }
+    
     
         return redirect()->route('admin.posts.index', $post->slug);
     }
