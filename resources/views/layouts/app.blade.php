@@ -18,7 +18,7 @@
     @yield('script')
 </head>
 <body>
-@include('partials.header')
+<!-- @include('partials.header') -->
     <div id="app">
         <main>
             @yield('content')
