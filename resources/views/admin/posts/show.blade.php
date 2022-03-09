@@ -12,14 +12,14 @@
                     <h2 class="bg-primary text-light p-2 text-capitalize">autore: </h2>
                     <h4 class="text-dark">{{ $post->user()->first()->name }}</h4>
                 </li>
-                <li>  
+                <li class=" ">  
                     <h4 class="bg-primary text-light p-2">Descrizione</h4>
                     <p class="text-dark">{{ $post->content }}</p>
                 </li>
-                <li>  
-                    <img class="img-fluid" src="{{ asset('storage/' . $post->image)}}" alt="{{ $post->image }}">
+                <li class=" ">  
+                    <img src="{{ asset('storage/' . $post->image)}}" alt="{{ $post->image }}">
                 </li>
-                <li>
+                <li class="">
                 <h4 class="bg-primary text-light p-2">Tags:</h4>
                 @foreach ($post->tags()->get() as $tag)
                     <a href="#" class="text-dark text-capitalize">{{ $tag->name }}</a>

@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
         <div class="row">
-            <form action="{{ route('admin.posts.update', $post) }}" method="post" enctype="multipart/form-data" class="col">
+            <form action="{{ route('admin.posts.update', $post) }}" method="post" class="col">
                 @csrf
                 @method('PATCH')
                 <div>
@@ -58,22 +58,13 @@
                         @endforeach
                     @endif
                 </div>
-
-                @if (!empty($post->image))
-                <div class="mb-3 py-3">
-                    <img src="{{ asset('storage/' . $post->image)}}" alt="{{ $post->image }}">  
-                </div>
-                @endif
-                <div class="mb-3 py-3">
-                    <legend class="bg-primary text-light p-2">Sostituisci l'immagine</legend>
-                    <label class="form-label" for="image"></label>
-                    <input type="file" class="form-control" id="image" name="image">
-                </div>
-                @error('image')
-                        <div class="alert alert-danger mt-3">
-                            {{ $message }}
-                        </div>
-                @enderror
+                <!-- <div class="mb-3">
+                    <label for="author" class="form-label">Autore</label>
+                    <input type="text" class="form-control" id="author" name="author" value="{{ $post->author }}">
+                    @error('author')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                </div> -->
                 
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>
