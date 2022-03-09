@@ -13,18 +13,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/', function () {
+    return view('welcome');
+})->name('guest.index');;
+
 Auth::routes();
 
+// Route::get('/home', 'HomeController@index')->name('home');
+
+// Auth::routes();
+
+// Route::get('/home', 'HomeController@index')->name('home');
 Route::middleware('auth') 
     ->namespace('Admin')
     ->name('admin.') 
     ->prefix('admin') 
     ->group(function () {
-        Route::get('/home', 'HomeController@index')->name('home');
+        Route::get('/', 'HomeController@index')->name('home');
+        // Route::get('/categories', 'CategoryController@index')->name('categories.index');
+        // Route::get('/categories/{category}', 'CategoryController@show')->name('categories.show');
         Route::resource('categories', 'CategoryController');
         Route::resource('posts', 'PostController');
     });
-
-Route::get('{any?}', function ($name = null) {
-    return view('guest.welcome');
-})->where('any', '.*') ->name("guest.index");
