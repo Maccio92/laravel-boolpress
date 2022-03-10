@@ -13,11 +13,11 @@
                         <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                     @endif
                 @else
-                    {{-- se vogliamo usare un link e js per fare un submit, la rotta logout e' una post --}}
-                    {{-- <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();
+                     <!-- se vogliamo usare un link e js per fare un submit, la rotta logout e' una post  -->
+                     <!-- <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();">
                         {{ __('Logout') }}
-                    </a> --}}
+                    </a>  -->
 
                     <form id="logout-form" action="{{ route('logout') }}" method="POST">
                         @csrf
